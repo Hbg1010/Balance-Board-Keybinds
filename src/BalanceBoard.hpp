@@ -15,5 +15,5 @@ public:
     static void setMin(float x);
     static bool onScale();
     static bool connected();
-    static bool APressed() const;
+    static bool APressed();
 };

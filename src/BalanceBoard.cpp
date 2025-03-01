@@ -47,7 +47,7 @@ bool BalanceBoard::connected() {
     return std::ref(BalanceBoard::balanceBoard) != nullptr && BalanceBoard::balanceBoard->IsConnected();
 }
 
-bool BalanceBoard::APressed() const {
+bool BalanceBoard::APressed() {
     if (balanceBoard != nullptr) {
         return balanceBoard->Button.A();
     }
