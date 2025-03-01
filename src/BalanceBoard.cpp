@@ -50,5 +50,7 @@ bool BalanceBoard::connected() {
 bool BalanceBoard::APressed() {
     if (balanceBoard != nullptr) {
         return balanceBoard->Button.A();
+    } else {
+        return false;
     }
 }
