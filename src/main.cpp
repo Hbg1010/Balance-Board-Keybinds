@@ -67,28 +67,32 @@ class $modify(PlayLayer) {
 class BalanceBoardChecker : public CCObject{
 protected:
     bool m_state = false;
-
+    static std::thread m_BoardLoop; 
 public:
     BalanceBoardChecker() {
         this->retain();
     }
 
     void checkBalanceBoard() {
-        bool currentConnected = BalanceBoard::connected();
+        bool currentConnected = BalanceBoard::checkAndTryConnect();
 
-        if (currentConnected == m_state) {
+        if (currentConnected != m_state) {
             m_state = currentConnected;
 
-            if (!m_state) {
+            if (m_state) {
                 BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
-
+                BalanceBoard::FORCEDISCONNECT = false;
+                m_BoardLoop = std::thread(&BalanceBoard::balanceBoardCheckLoop);
                 Notification::create(
                     "Balance Board Attached",
                     CCSprite::createWithSpriteFrameName("controllerBtn_A_001.png") // TODO: custom sprite
                 )->show();
             } else {
+                if (m_BoardLoop.joinable()) {
+                    BalanceBoard::FORCEDISCONNECT = true;
+                    log::debug("??!?!?!?");
+                }
                 BindManager::get()->detachDevice("balance_board"_spr);
-
                 Notification::create(
                     "Balance Board Detached",
                     CCSprite::createWithSpriteFrameName("controllerBtn_B_001.png") // TODO: custom sprite
