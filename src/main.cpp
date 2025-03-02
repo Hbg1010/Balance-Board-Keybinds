@@ -10,55 +10,55 @@ using namespace geode::prelude;
 
 #include <Geode/modify/PlayLayer.hpp>
 
-class $modify(PlayLayer) {
+// class $modify(PlayLayer) {
 
-    struct Fields {
-        bool pauseThis;
-        wiimote* mote;
-    };
+//     struct Fields {
+//         bool pauseThis;
+//         wiimote* mote;
+//     };
 
     
-    bool init(GJGameLevel* level, bool useReplay, bool p2) {
-        if (!PlayLayer::init(level, useReplay, p2)) return false;
-        wiimote** remote;
-        wiimote* balanceBoard = nullptr;
-        for (unsigned int i = 0; i < 5; i++) {
-            wiimote *next = new wiimote;
-            if (next->Connect(wiimote::FIRST_AVAILABLE)) {
-                if (!next->IsBalanceBoard()) {
-                    balanceBoard = next;
-                    break;
-                } else {
-                    remote[i] = next;
-                }
-            }
-        }
+//     bool init(GJGameLevel* level, bool useReplay, bool p2) {
+//         if (!PlayLayer::init(level, useReplay, p2)) return false;
+//         wiimote** remote;
+//         wiimote* balanceBoard = nullptr;
+//         for (unsigned int i = 0; i < 5; i++) {
+//             wiimote *next = new wiimote;
+//             if (next->Connect(wiimote::FIRST_AVAILABLE)) {
+//                 if (!next->IsBalanceBoard()) {
+//                     balanceBoard = next;
+//                     break;
+//                 } else {
+//                     remote[i] = next;
+//                 }
+//             }
+//         }
 
-        if (std::ref(balanceBoard) != nullptr) {
-            log::debug("x");
-            m_fields->mote = balanceBoard;
-        } else {
+//         if (std::ref(balanceBoard) != nullptr) {
+//             log::debug("x");
+//             m_fields->mote = balanceBoard;
+//         } else {
             
-        }
-        // auto alert = FLAlertLayer::create(
-        //     "Title",
-        //     "Hi mom!",
-        //     "OK"
-        // );
-        // alert->m_scene = this;
-        // alert->show();
-        // m_fields->pauseThis = true;
-        return true;
-    }
+//         }
+//         // auto alert = FLAlertLayer::create(
+//         //     "Title",
+//         //     "Hi mom!",
+//         //     "OK"
+//         // );
+//         // alert->m_scene = this;
+//         // alert->show();
+//         // m_fields->pauseThis = true;
+//         return true;
+//     }
 
-    void resetLevel() {
-        if (m_fields->pauseThis) pauseGame(true);
-        if (m_fields->mote->Button.A()) {
-            log::debug("A");
-        }
-        PlayLayer::resetLevel();
-    }
-};
+//     void resetLevel() {
+//         if (m_fields->pauseThis) pauseGame(true);
+//         if (m_fields->mote->Button.A()) {
+//             log::debug("A");
+//         }
+//         PlayLayer::resetLevel();
+//     }
+// };
 
 // $on_mod(Loaded) {
 //     // BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
@@ -76,6 +76,7 @@ public:
     void checkBalanceBoard() {
         bool currentConnected = BalanceBoard::checkAndTryConnect();
 
+        
         if (currentConnected != m_state) {
             m_state = currentConnected;
 
@@ -101,6 +102,8 @@ public:
         }
     }
 };
+
+std::thread BalanceBoardChecker::m_BoardLoop; 
 
 $execute {
 	// check every second if a controller has been connected

@@ -26,10 +26,10 @@ BalanceBoard* BalanceBoard::create(wiimote* input) {
 }
 
 float BalanceBoard::getWeight() {
-    if (BalanceBoard::balanceBoard->IsConnected()) {
+    if (connected()) {
         return BalanceBoard::balanceBoard->BalanceBoard.Lb.Total;
     } else {
-        return -1;
+        return -1.f;
         // throw event
     }
 }
@@ -39,7 +39,7 @@ void BalanceBoard::setMin(float x) {
 }
 
 bool BalanceBoard::onScale() {
-    if (BalanceBoard::balanceBoard->IsConnected()) {
+    if (connected()) {
         return BalanceBoard::balanceBoard->BalanceBoard.Lb.Total > BalanceBoard::min;
     } else {
         // throw event
@@ -48,27 +48,29 @@ bool BalanceBoard::onScale() {
 }
 
 bool BalanceBoard::connected() {
-    return std::ref(BalanceBoard::balanceBoard) != nullptr && BalanceBoard::balanceBoard->IsConnected();
+    return BalanceBoard::balanceBoard != nullptr && BalanceBoard::balanceBoard->IsConnected();
 }
 
 bool BalanceBoard::checkAndTryConnect() {
-    if (connected) return true;
+    if (connected()) return true;
 
     // TODO: ASSUMES ONLY 1 CONNECTED
-    if (balanceBoard->Connect(wiimote::FIRST_AVAILABLE) && balanceBoard->IsBalanceBoard()){
+    wiimote* temp = new wiimote();
+    if (temp->Connect(wiimote::FIRST_AVAILABLE) && temp->IsBalanceBoard()){
+        balanceBoard = temp;
         return true;
     } else {
         return false;
     }
 }
 
-bool BalanceBoard::APressed() {
-    if (balanceBoard != nullptr) {
-        return balanceBoard->Button.A();
-    } else {
-        return false;
-    }
-}
+// bool BalanceBoard::APressed() {
+//     if (balanceBoard != nullptr) {
+//         return balanceBoard->Button.A();
+//     } else {
+//         return false;
+//     }
+// }
 
 void BalanceBoard::disconnect() {
     BalanceBoard::balanceBoard->Disconnect();
@@ -76,6 +78,9 @@ void BalanceBoard::disconnect() {
 
 // This loop will run on a seperate thread. there it will constantly check balance board state
 void BalanceBoard::balanceBoardCheckLoop(){
+    geode::Loader::get()->queueInMainThread([] {
+        geode::log::debug("lost connection!");
+    });
     while(BalanceBoard::balanceBoard->IsConnected() && !FORCEDISCONNECT){
         while(balanceBoard->RefreshState() == NO_CHANGE) Sleep(1);
 
@@ -84,11 +89,11 @@ void BalanceBoard::balanceBoardCheckLoop(){
 
             if (wasOnScale) {
                 geode::Loader::get()->queueInMainThread([=] {
-                    PressBindEvent(BBKeybind::create(getWeight(), onScale()), true).post();
+                    PressBindEvent(BBKeybind::create(getWeight(), onScale()), false).post();
                 }); 
             } else {
                 geode::Loader::get()->queueInMainThread([=] {
-                    PressBindEvent(BBKeybind::create(getWeight(), onScale()), false).post();
+                    PressBindEvent(BBKeybind::create(getWeight(), onScale()), true).post();
                 }); 
             }
             

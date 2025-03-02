@@ -24,5 +24,5 @@ public:
     static bool checkAndTryConnect();
     static bool FORCEDISCONNECT;
 
-    void balanceBoardCheckLoop();
+    static void balanceBoardCheckLoop();
 };
