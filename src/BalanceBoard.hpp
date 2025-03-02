@@ -1,5 +1,8 @@
 #pragma once
 #include "../include/wiimote.h"
+#include "BBKeybind.hpp"
+
+using namespace keybinds;
 
 class BalanceBoard {
 protected:
@@ -7,6 +10,7 @@ protected:
     ~BalanceBoard();
     static wiimote* balanceBoard;
     static float min;
+    static bool wasOnScale;
     //  BalanceBoard* obj;
 
 public:
@@ -16,4 +20,9 @@ public:
     static bool onScale();
     static bool connected();
     static bool APressed();
+    static void disconnect();
+    static bool checkAndTryConnect();
+    static bool FORCEDISCONNECT;
+
+    void balanceBoardCheckLoop();
 };
