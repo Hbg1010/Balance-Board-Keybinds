@@ -31,5 +31,18 @@
 		"gameplay",
 		"offline",
 		"utility"
-	]
+	],
+	"settings": {
+		"minWeight": {
+			"type": "float",
+			"name": "Minamum weight",
+			"default": 20.0,
+			"min": 0
+		},
+		"lbs": {
+			"type": "bool",
+			"name": "Use lbs",
+			"default": true
+		}
+	}
 }
