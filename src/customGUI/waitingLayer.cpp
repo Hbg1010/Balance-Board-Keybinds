@@ -15,7 +15,7 @@ waitingLayer* waitingLayer::create(bool const& firstTime) {
 bool waitingLayer::setup(bool const& firstTime) {
     this->setTitle(firstTime ? "Waiting For Balance Board" : "Connection Lost!");
 
-    auto description = CCLabelBMFont::create(firstTime ? "Step on the Balance Board!" : "Reconnect the board!", "bigFont.fnt");
+    auto description = CCLabelBMFont::create(firstTime ? "Step on the Balance Board!" : "Reconnect the Balance Board", "bigFont.fnt");
     description->setScale(0.6f);
     description->setPosition(m_mainLayer->getContentWidth()/2,m_mainLayer->getContentHeight()/2);
 
