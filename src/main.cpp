@@ -3,7 +3,6 @@
 #include <mmsystem.h>
 #include "BalanceBoard.hpp"
 #include "BBKeybind.hpp"
-
 using namespace geode::prelude;
 
 #define MAXBOARDS 1
@@ -106,6 +105,20 @@ public:
 std::thread BalanceBoardChecker::m_BoardLoop; 
 
 $execute {
+
+    BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
+
+
+    BindManager::get()->registerBindable({
+        // ID, should be prefixed with mod ID
+        "init"_spr,
+        "Balance Board Init",
+        "waits for the player to step on the balance board before starting the round!",
+        // Default binds
+        { BBKeybind::create(false), Keybind::create(KEY_Q, Modifier::None) },
+        "BalanceBoard"
+    });
+
 	// check every second if a controller has been connected
 	Loader::get()->queueInMainThread([] {
 		CCScheduler::get()->scheduleSelector(
