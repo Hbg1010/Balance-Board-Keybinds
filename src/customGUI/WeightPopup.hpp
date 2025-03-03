@@ -1,7 +1,8 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
-
+#include "../utils/weightUtils.hpp"
+#include "../BalanceBoard.hpp"
 using namespace geode::prelude;
 
 
