@@ -33,6 +33,11 @@
 		"utility"
 	],
 	"settings": {
+		"enabled": {
+			"type": "bool",
+			"name": "Enable",
+			"default": true
+		},
 		"minWeight": {
 			"type": "float",
 			"name": "Minamum weight",
