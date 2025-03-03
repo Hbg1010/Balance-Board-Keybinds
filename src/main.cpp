@@ -52,8 +52,9 @@ std::thread BalanceBoardChecker::m_BoardLoop;
 
 $execute {
 
-    BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
+    // BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
 
+    BindManager::get()->addBindTo("robtop.geometry-dash/jump-p1", BBKeybind::create(false));
 
     BindManager::get()->registerBindable({
         // ID, should be prefixed with mod ID
