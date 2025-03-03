@@ -96,11 +96,12 @@ void BalanceBoard::balanceBoardCheckLoop(){
                     PressBindEvent(BBKeybind::create(onScale()), true).post();
                 }); 
             }
-            
         }
     }
 
+    // this happens when connect is lost
     geode::Loader::get()->queueInMainThread([] {
+        PressBindEvent(BBKeybind::create(true), false).post();
         geode::log::debug("lost connection!");
     });
 }
