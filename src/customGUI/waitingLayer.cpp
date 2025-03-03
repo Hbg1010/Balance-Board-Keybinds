@@ -1,9 +1,9 @@
 #include "waitingLayer.hpp"
 
-waitingLayer* waitingLayer::create() {
+waitingLayer* waitingLayer::create(bool const& firstTime) {
     auto temp = new waitingLayer();
 
-    if (temp->initAnchored(360, 180)) {
+    if (temp->initAnchored(360, 180, firstTime)) {
         temp->autorelease();
         return temp;
     } else {
@@ -12,10 +12,10 @@ waitingLayer* waitingLayer::create() {
     }
 }
 
-bool waitingLayer::setup() {
-    this->setTitle("Waiting For Balance Board");
+bool waitingLayer::setup(bool const& firstTime) {
+    this->setTitle(firstTime ? "Waiting For Balance Board" : "Connection Lost!");
 
-    auto description = CCLabelBMFont::create("Step on the Balance Board!", "bigFont.fnt");
+    auto description = CCLabelBMFont::create(firstTime ? "Step on the Balance Board!" : "Reconnect the board!", "bigFont.fnt");
     description->setScale(0.6f);
     description->setPosition(m_mainLayer->getContentWidth()/2,m_mainLayer->getContentHeight()/2);
 

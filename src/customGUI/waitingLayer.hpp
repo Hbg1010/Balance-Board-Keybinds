@@ -4,9 +4,9 @@
 
 using namespace geode::prelude;
 
-class waitingLayer : public Popup<> {
+class waitingLayer : public Popup<bool const&> {
 protected:
-    bool setup();
+    bool setup(bool const& input);
 public:
-    static waitingLayer* create();
+    static waitingLayer* create(bool const& input);
 };

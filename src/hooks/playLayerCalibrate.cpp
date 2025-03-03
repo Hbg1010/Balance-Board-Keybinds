@@ -7,6 +7,6 @@ void playLayerCalibrate::startGame() {
 
 void playLayerCalibrate::createWaitingLayer() {
     PlayLayer::pauseGame(true);
-    auto x = waitingLayer::create();
+    auto x = waitingLayer::create(true);
     x->show();
 }
