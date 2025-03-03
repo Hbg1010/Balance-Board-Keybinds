@@ -16,9 +16,16 @@ WeightPopup* WeightPopup::create(float const& input) {
 
 bool WeightPopup::setup(float const& input) {
     this->setTitle("Weight");
-    log::debug("{}", input);
+    useLbs = Mod::get()->getSettingValue<bool>("lbs");
 
-    weightTxt = CCLabelBMFont::create(fmt::format("{} seconds", input).c_str(), "bigFont.fnt");
+    std::string theString;
+    if (input < 0) {
+        theString = "Not connected!";
+    } else {
+        theString = fmt::format("{} {}", useLbs ? input : weightUtils::lbsToKg(input), useLbs ? "lbs" : "kg").c_str();
+    }
+
+    weightTxt = CCLabelBMFont::create(theString.c_str(), "bigFont.fnt");
     weightTxt->setPosition(m_mainLayer->getContentWidth()/2,m_mainLayer->getContentHeight()/2);
     m_mainLayer->addChild(weightTxt);
     weightTxt->setID("Weight-Text"_spr);
@@ -35,5 +42,13 @@ bool WeightPopup::setup(float const& input) {
 }
 
 void WeightPopup::onCheck(CCObject* sender) {
-    weightTxt->setString(fmt::format("{}", BalanceBoard::getWeight()).c_str());
+    float weight = BalanceBoard::getWeight();
+    std::string theString;
+
+    if (weight < 0) {
+        theString = "Not connected!";
+    } else {
+        theString = fmt::format("{} {}", useLbs ? weight : weightUtils::lbsToKg(weight), useLbs ? "lbs" : "kg");
+    }
+    weightTxt->setString(theString.c_str());
 }
