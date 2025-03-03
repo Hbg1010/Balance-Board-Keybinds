@@ -89,11 +89,11 @@ void BalanceBoard::balanceBoardCheckLoop(){
 
             if (wasOnScale) {
                 geode::Loader::get()->queueInMainThread([=] {
-                    PressBindEvent(BBKeybind::create(getWeight(), onScale()), false).post();
+                    PressBindEvent(BBKeybind::create(onScale()), false).post();
                 }); 
             } else {
                 geode::Loader::get()->queueInMainThread([=] {
-                    PressBindEvent(BBKeybind::create(getWeight(), onScale()), true).post();
+                    PressBindEvent(BBKeybind::create(onScale()), true).post();
                 }); 
             }
             

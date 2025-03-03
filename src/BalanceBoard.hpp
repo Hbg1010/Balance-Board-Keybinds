@@ -1,6 +1,7 @@
 #pragma once
 #include "../include/wiimote.h"
 #include "BBKeybind.hpp"
+#include "utils/weightUtils.hpp"
 
 using namespace keybinds;
 

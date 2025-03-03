@@ -9,7 +9,7 @@ public:
     float weight;
     bool onScale;
 
-    static BBKeybind* create(float weight, bool onBoard);
+    static BBKeybind* create(bool onBoard);
     bool isOnBoard() const;
     float getWeight() const;
     bool isEqual(Bind* other);

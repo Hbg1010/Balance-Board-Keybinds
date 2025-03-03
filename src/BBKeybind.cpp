@@ -1,9 +1,9 @@
 #include "BBKeybind.hpp"
 
-BBKeybind* BBKeybind::create(float w, bool onB) {
+BBKeybind* BBKeybind::create(bool onB) {
     auto ret = new BBKeybind();
     ret->autorelease();
-    ret->weight = w;
+    // ret->weight = w;
     ret->onScale = onB;
     return ret;
 }
@@ -21,20 +21,20 @@ DeviceID BBKeybind::getDeviceID() const {
 
 matjson::Value BBKeybind::save() const {
     return matjson::makeObject({
-        { "weight", static_cast<float>(weight) },
+        { "onBoard", static_cast<bool>(onScale)}
     });
 }
 
 BBKeybind* BBKeybind::parse(matjson::Value const& json) {
     return BBKeybind::create(
-        static_cast<float>(json["weight"].asDouble().unwrapOr(0)),
-        static_cast<bool>(json["weight"].asBool().unwrapOr(false))
+        // static_cast<float>(json["weight"].asDouble().unwrapOr(0)),
+        static_cast<bool>(json["onBoard"].asBool().unwrapOr(false))
     );
 }
 
 // Get the hash for this bind
 size_t BBKeybind::getHash() const {
-    return std::hash<float>()(weight) ^ static_cast<bool>(onScale);
+    return std::hash<float>()(weight) ^ 0x8372; //static_cast<bool>(onScale);
 }
 
 bool BBKeybind::isOnBoard() const {
@@ -46,5 +46,5 @@ float BBKeybind::getWeight() const {
 }
 
 std::string BBKeybind::toString() const {
-    return fmt::format("onBoard {} & Weight {}", onScale, weight);
+    return onScale ? "On Board" : "On Board";
 }
