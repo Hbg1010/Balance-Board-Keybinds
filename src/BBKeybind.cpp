@@ -46,5 +46,5 @@ float BBKeybind::getWeight() const {
 }
 
 std::string BBKeybind::toString() const {
-    return onScale ? "On Board" : "On Board";
+    return onScale ? "On Board" : "Off Balance Board";
 }
