@@ -1,13 +1,7 @@
-#include <Geode/Geode.hpp>
-#include "../include/wiimote.h"
-#include <mmsystem.h>
 #include "BalanceBoard.hpp"
-#include "BBKeybind.hpp"
 using namespace geode::prelude;
 
 #define MAXBOARDS 1
-
-#include <Geode/modify/PlayLayer.hpp>
 
 class BalanceBoardChecker : public CCObject{
 protected:

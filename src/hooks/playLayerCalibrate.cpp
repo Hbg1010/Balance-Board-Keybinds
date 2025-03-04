@@ -3,7 +3,6 @@
 void playLayerCalibrate::startGame() {
     PlayLayer::startGame();
     createWaitingLayer(true);
-
 }
 
 void playLayerCalibrate::createWaitingLayer(bool firstTime) {

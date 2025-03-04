@@ -1,5 +1,4 @@
 #pragma once
-// #include <Geode/Geode.hpp>
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 
 using namespace keybinds;

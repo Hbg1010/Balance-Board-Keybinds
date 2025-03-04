@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Geode/Geode.hpp>
 #include "../BBKeybind.hpp"
 #include "../customGUI/waitingLayer.hpp"
 #include "../utils/BBDisconnectEvent.hpp"

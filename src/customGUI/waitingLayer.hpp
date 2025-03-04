@@ -1,5 +1,4 @@
 #pragma once
-#include <Geode/Geode.hpp>
 #include "../BBKeybind.hpp"
 
 using namespace geode::prelude;

@@ -1,7 +1,6 @@
-#include <Geode/Geode.hpp>
+#pragma once
+
 #include "../customGUI/WeightPopup.hpp"
-// #include "../customGUI/waitingLayer.hpp"
-#include "../BalanceBoard.hpp"
 #include <Geode/modify/MenuLayer.hpp>
 using namespace geode::prelude;
 

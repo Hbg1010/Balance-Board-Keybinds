@@ -1,7 +1,5 @@
 #include "WeightPopup.hpp"
 
-CCLabelBMFont* weightTxt; // this is the timer element found on screen. it is updated to represent the timer!
-
 WeightPopup* WeightPopup::create(float const& input) {
     auto temp = new WeightPopup();
 
