@@ -14,7 +14,7 @@ waitingLayer* waitingLayer::create(bool const& firstTime) {
 
 bool waitingLayer::setup(bool const& firstTime) {
     this->setTitle(firstTime ? "Waiting For Balance Board" : "Connection Lost!");
-
+    this->m_closeBtn->getParent()->removeChild(this->m_closeBtn);
     auto description = CCLabelBMFont::create(firstTime ? "Step on the Balance Board!" : "Reconnect the Balance Board", "bigFont.fnt");
     description->setScale(0.6f);
     description->setPosition(m_mainLayer->getContentWidth()/2,m_mainLayer->getContentHeight()/2);
@@ -24,7 +24,7 @@ bool waitingLayer::setup(bool const& firstTime) {
 
     // maybe this is a safe way to do this :terror:
     this->template addEventListener<keybinds::InvokeBindFilter>([=](keybinds::InvokeBindEvent* event) {
-        if (event->isDown()) {
+        if (event->isDown() || typeinfo_cast<BBKeybind*>(event)->isOnBoard()) {
             if (auto pl = PlayLayer::get()) {
                 if (pl->m_isPaused) {
                     auto parent = pl->getParent();
