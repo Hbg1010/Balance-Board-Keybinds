@@ -4,3 +4,5 @@ This library takes advantage of [Wiiyourself](https://github.com/greenjava/WiiYo
 
 Mod written by Hbg
 Idea for balance board by Cymmas
+
+<img src="logo.png" width="150" alt="the mod's logo" />
