@@ -7,6 +7,7 @@ bool MyMenu::init() {
     auto weightTestBtn = CCMenuItemSpriteExtra::create(weightTestSpr, this, menu_selector(MyMenu::openWeight));
     this->getChildByID("bottom-menu")->addChild(weightTestBtn);
     this->getChildByID("bottom-menu")->updateLayout();
+    weightTestBtn->setID("Weight-test-btn"_spr);
     log::debug("x");
 
     return true;

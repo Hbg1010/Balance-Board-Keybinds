@@ -56,7 +56,7 @@ $execute {
         "Balance Board Init",
         "waits for the player to step on the balance board before starting the round!",
         // Default binds 
-        { BBKeybind::create(false), Keybind::create(KEY_Q, Modifier::None) }, // TODO: REMOVE Q
+        { BBKeybind::create(true), Keybind::create(KEY_Q, Modifier::None) }, // TODO: REMOVE Q
         "BalanceBoard"
     });
 
