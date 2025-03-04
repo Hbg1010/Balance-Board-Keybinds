@@ -20,7 +20,7 @@ public:
     static void setMin(float x);
     static bool onScale();
     static bool connected();
-    static bool APressed();
+    // static bool APressed();
     static void disconnect();
     static bool checkAndTryConnect();
     static bool FORCEDISCONNECT;

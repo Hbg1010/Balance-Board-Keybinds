@@ -2847,7 +2847,7 @@ bool wiimote::PlaySample(const wiimote_sample &sample, BYTE volume,
     WriteData(0x04a20001, 0x08);
     // Write 7-byte configuration to registers 0x04a20001-0x04a20008
     BYTE bytes[7] =
-    { 0x00, 0x00, 0x00, 10 + (BYTE) freq, volume, 0x00, 0x00 };
+    { 0x00, 0x00, 0x00, 10 + static_cast<BYTE>(freq), volume, 0x00, 0x00 };
     WriteData(0x04a20001, sizeof(bytes), bytes);
     // + Write 0x01 to register 0x04a20008
     WriteData(0x04a20008, 0x01);
@@ -2919,7 +2919,7 @@ bool wiimote::PlaySquareWave(speaker_freq freq, BYTE volume)
     // write default sound mode (4bit ADPCM, we assume) 7-byte configuration
     //  to registers 0xa20001-0xa20008
     BYTE bytes[7] =
-    { 0x00, 0x00, 0x00, 10 + (BYTE) freq, volume, 0x00, 0x00 };
+    { 0x00, 0x00, 0x00, 10 + static_cast<BYTE>(freq), volume, 0x00, 0x00 };
     WriteData(0x04a20001, sizeof(bytes), bytes);
     // write 0x01 to register 0xa20008
     WriteData(0x04a20008, 0x01);
