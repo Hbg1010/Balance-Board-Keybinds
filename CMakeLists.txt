@@ -6,8 +6,8 @@ set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 project(balance-board VERSION 1.0.0)
-set(WIIUSE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include/wiiuse/src")
-set(WIIUSE_LIB "/include/wiiuse/src/lib/libwiiuse.so") # or .a for static
+# set(WIIUSE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include/wiiuse/src")
+# set(WIIUSE_LIB "/include/wiiuse/src/lib/libwiiuse.so") # or .a for static
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
