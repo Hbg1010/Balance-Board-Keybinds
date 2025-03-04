@@ -2847,7 +2847,7 @@ bool wiimote::PlaySample(const wiimote_sample &sample, BYTE volume,
     WriteData(0x04a20001, 0x08);
     // Write 7-byte configuration to registers 0x04a20001-0x04a20008
     BYTE bytes[7] =
-    { 0x00, 0x00, 0x00, 10 + (BYTE) freq, volume, 0x00, 0x00 };
+    { 0x00, 0x00, 0x00, (BYTE) (10 + freq), volume, 0x00, 0x00 };
     WriteData(0x04a20001, sizeof(bytes), bytes);
     // + Write 0x01 to register 0x04a20008
     WriteData(0x04a20008, 0x01);
@@ -2919,7 +2919,7 @@ bool wiimote::PlaySquareWave(speaker_freq freq, BYTE volume)
     // write default sound mode (4bit ADPCM, we assume) 7-byte configuration
     //  to registers 0xa20001-0xa20008
     BYTE bytes[7] =
-    { 0x00, 0x00, 0x00, 10 + (BYTE) freq, volume, 0x00, 0x00 };
+    { 0x00, 0x00, 0x00, BYTE(10 + freq), volume, 0x00, 0x00 };
     WriteData(0x04a20001, sizeof(bytes), bytes);
     // write 0x01 to register 0xa20008
     WriteData(0x04a20008, 0x01);
@@ -2973,3 +2973,30 @@ void wiimote::StopRecording()
 
 // ------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------
+
+// // hbg trash additions
+
+// BYTE wiimote::freqToByte(speaker_freq input) {
+//     switch(input) {
+//         case FREQ_NONE:
+//             return 0x0;
+//         case FREQ_4200HZ:
+//             return 1;
+//         case FREQ_3920HZ:
+//             return 2;
+//         case FREQ_3640HZ:
+//             return 3;
+//         case FREQ_3360HZ:
+//             return 4;
+//         case FREQ_3130HZ:
+//             return 5;
+//         case FREQ_2940HZ:
+//             return 6;
+//         case FREQ_2760HZ:
+//             return 7;
+//         case FREQ_2610HZ:
+//             return 8;
+//         default FREQ_2470HZ:
+//             return 9;
+//     }
+// }
