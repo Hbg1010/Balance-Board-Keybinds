@@ -29,7 +29,7 @@ BalanceBoard* BalanceBoard::create(wiimote* input) {
 }
 
 float BalanceBoard::getWeight() {
-    if (WIIMOTE_IS_CONNECTED(bbWii[0])) {
+    if (connected()) {
         float total = balanceBoard->tl + balanceBoard->tr + balanceBoard->bl + balanceBoard->br;
         return total;
     } else {
