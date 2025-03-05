@@ -9,13 +9,15 @@ protected:
     static std::thread m_BoardLoop; 
 public:
     BalanceBoardChecker() {
+        // log::debug("x");
         this->retain();
     }
 
     void checkBalanceBoard() {
+        // log::debug("check 1!!!!!");
         bool currentConnected = BalanceBoard::checkAndTryConnect();
+        // log::debug("check 2!!!!!!");
 
-        
         if (currentConnected != m_state) {
             m_state = currentConnected;
 
@@ -62,6 +64,7 @@ $execute {
 
 	// check every second if a controller has been connected
 	Loader::get()->queueInMainThread([] {
+        // log::debug("x");
 		CCScheduler::get()->scheduleSelector(
 			schedule_selector(BalanceBoardChecker::checkBalanceBoard),
 			new BalanceBoardChecker(), 1.f, false
