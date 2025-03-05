@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/wiimote.h"
+#include "../include/wiiuse/wiiuse.h"
 #include "BBKeybind.hpp"
 #include "utils/weightUtils.hpp"
 
@@ -7,9 +7,11 @@ using namespace keybinds;
 
 class BalanceBoard {
 protected:
-    BalanceBoard(wiimote* input);
+    BalanceBoard(wii_board_t* input);
     ~BalanceBoard();
-    static wiimote* balanceBoard;
+    static wiimote** bbWii;
+    static wii_board_t* balanceBoard;
+
     static float min;
     static bool wasOnScale;
     //  BalanceBoard* obj;
