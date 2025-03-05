@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-project(wiibinds VERSION 1.0.0)
+project(balance-board VERSION 1.0.0)
 
 if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 	set(SUBPROJECT YES)
@@ -110,7 +110,7 @@ if(NOT SUBPROJECT)
 
     file(GLOB_RECURSE SOURCES src/*.cpp)
     add_library(${PROJECT_NAME} SHARED ${SOURCES})
-	target_link_libraries(wiibinds wiiuse)
+	target_link_libraries(balance-board wiiuse)
 
     if (NOT DEFINED ENV{GEODE_SDK})
         message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
