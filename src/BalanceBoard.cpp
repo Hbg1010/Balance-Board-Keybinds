@@ -70,7 +70,7 @@ bool BalanceBoard::checkAndTryConnect() {
         balanceBoard = (wii_board_t*)bbWii[0];
         return true;
     } else {
-        log::debug("not a balance board!");
+        geode::log::debug("not a balance board!");
         return false;
     }
 }
