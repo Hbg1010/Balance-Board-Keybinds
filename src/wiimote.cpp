@@ -20,6 +20,7 @@
 #endif // _MSC_VER
 #include "../include/wiimote.h"
 #include <setupapi.h>
+#include <Geode/Geode.hpp>
 extern "C"
 {
 # ifdef __MINGW32__
@@ -236,7 +237,7 @@ bool wiimote::Connect(unsigned wiimote_index, bool force_hidwrites)
             DIGCF_DEVICEINTERFACE);    // | DIGCF_PRESENT);
     if (!dev_info)
     {
-        WARN(_T("couldn't get device info"));
+        geode::log::debug("COULDNT GET INFO");
         return false;
     }
 
@@ -264,7 +265,8 @@ bool wiimote::Connect(unsigned wiimote_index, bool force_hidwrites)
         if (!SetupDiGetDeviceInterfaceDetail(dev_info, &didata, didetail, req_size,
                 &req_size, NULL))
         {
-            WARN(_T("couldn't get devinterface info for %u"), index);
+            geode::log::debug("couldn't get devinterface info for {}", index);
+
             break;
         }
 
@@ -275,8 +277,10 @@ bool wiimote::Connect(unsigned wiimote_index, bool force_hidwrites)
                 FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
         if (Handle == INVALID_HANDLE_VALUE)
         {
-            DEEP_TRACE(_T(".... failed with err %x (probably harmless)."), GetLastError());
+            geode::log::debug("mm{}", GetLastError());
             goto skip;
+            geode::log::debug("{}", GetLastError());
+
         }
 
         // get the device attributes
@@ -295,10 +299,9 @@ bool wiimote::Connect(unsigned wiimote_index, bool force_hidwrites)
                 goto skip;
 
             // the wiimote is installed, but it may not be currently paired:
-            if (wiimote_index == FIRST_AVAILABLE)
+            if (wiimote_index == FIRST_AVAILABLE) {
                 TRACE(_T(".. opening Wiimote %u:"), wiimotes_found);
-            else
-                TRACE(_T(".. opening:"));
+            } else TRACE(_T(".. opening:"));
 
             // re-open the handle, but this time we don't allow write sharing
             //  (that way subsequent calls can still _discover_ wiimotes above, but
@@ -320,6 +323,7 @@ bool wiimote::Connect(unsigned wiimote_index, bool force_hidwrites)
                     NULL);
             if (Handle == INVALID_HANDLE_VALUE)
             {
+                geode::log::debug("{}", GetLastError());
                 TRACE(_T(".... failed with err %x"), GetLastError());
                 goto skip;
             }
