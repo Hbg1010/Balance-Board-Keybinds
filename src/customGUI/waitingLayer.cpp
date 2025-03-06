@@ -24,7 +24,7 @@ bool waitingLayer::setup(bool const& firstTime) {
 
     // maybe this is a safe way to do this :terror:
     this->template addEventListener<keybinds::InvokeBindFilter>([=](keybinds::InvokeBindEvent* event) {
-        if (event->isDown() || typeinfo_cast<BBKeybind*>(event)->isOnBoard()) {
+        if (event->isDown()) {
             if (auto pl = PlayLayer::get()) {
                 if (pl->m_isPaused) {
                     auto parent = pl->getParent();
