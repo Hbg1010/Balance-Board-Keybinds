@@ -58,7 +58,7 @@ bool BalanceBoard::connected() {
 bool BalanceBoard::checkAndTryConnect() {
     if (connected()) return true;
 
-    wiimote** temp = nullptr;
+    wiimote** temp = wiiuse_init(1);
     int c;
     // TODO: ASSUMES ONLY 1 CONNECTED
     if (!wiiuse_find(temp, 1, 1)) return false;
