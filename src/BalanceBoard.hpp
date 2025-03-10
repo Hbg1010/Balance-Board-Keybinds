@@ -2,6 +2,7 @@
 #include "../include/wiiuse/wiiuse.h"
 #include "BBKeybind.hpp"
 #include "utils/weightUtils.hpp"
+// #include <atomic>
 
 using namespace keybinds;
 
@@ -17,6 +18,7 @@ protected:
     //  BalanceBoard* obj;
 
 public:
+    static bool done;
     static BalanceBoard* create(wiimote* input);
     static float getWeight();
     static void setMin(float x);

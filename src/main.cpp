@@ -1,4 +1,5 @@
 #include "BalanceBoard.hpp"
+#include <future>
 using namespace geode::prelude;
 
 #define MAXBOARDS 1
@@ -7,6 +8,7 @@ class BalanceBoardChecker : public CCObject{
 protected:
     bool m_state = false;
     static std::thread m_BoardLoop; 
+
 public:
     BalanceBoardChecker() {
         // log::debug("x");
@@ -15,22 +17,32 @@ public:
 
     void checkBalanceBoard() {
         // log::debug("check 1!!!!!");
-        bool currentConnected = BalanceBoard::checkAndTryConnect();
-        // log::debug("check 2!!!!!!");
+        bool currentConnected = BalanceBoard::connected();
 
-        if (currentConnected != m_state) {
+        if (!currentConnected && !m_state) {
+            if (BalanceBoard::done) {
+                //https://stackoverflow.com/questions/9094422/how-to-check-if-a-stdthread-is-still-running
+                //https://stackoverflow.com/questions/9094422/how-to-check-if-a-stdthread-is-still-running//
+                m_BoardLoop = std::thread(&BalanceBoard::checkAndTryConnect);
+                BalanceBoard::done = false;
+            }
+        }
+
+        else if (currentConnected != m_state) {
             m_state = currentConnected;
 
             if (m_state) {
                 BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
+                BindManager::get()->addBindTo("robtop.geometry-dash/jump-p1", BBKeybind::create(false));
                 BalanceBoard::FORCEDISCONNECT = false;
                 m_BoardLoop = std::thread(&BalanceBoard::balanceBoardCheckLoop);
+                BalanceBoard::done = false;
                 Notification::create(
                     "Balance Board Attached",
                     CCSprite::createWithSpriteFrameName("controllerBtn_A_001.png") // TODO: custom sprite
                 )->show();
             } else {
-                if (m_BoardLoop.joinable()) {
+                if (!BalanceBoard::done) {
                     BalanceBoard::FORCEDISCONNECT = true;
                     log::debug("??!?!?!?");
                 }
@@ -50,7 +62,6 @@ $execute {
 
     // BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
 
-    BindManager::get()->addBindTo("robtop.geometry-dash/jump-p1", BBKeybind::create(false));
 
     BindManager::get()->registerBindable({
         // ID, should be prefixed with mod ID
@@ -71,4 +82,3 @@ $execute {
 		);
 	});
 }
-

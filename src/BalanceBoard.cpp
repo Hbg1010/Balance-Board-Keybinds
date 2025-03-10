@@ -5,6 +5,7 @@ wii_board_t* BalanceBoard::balanceBoard = nullptr; // Or initialize properly
 float BalanceBoard::min = 20;
 bool BalanceBoard::wasOnScale = false;
 bool BalanceBoard::FORCEDISCONNECT = false;
+bool BalanceBoard::done = true;
 
 BalanceBoard::BalanceBoard(wii_board_t* input) {
     BalanceBoard::min = 20;
@@ -68,6 +69,7 @@ bool BalanceBoard::checkAndTryConnect() {
         geode::log::debug("x");
         bbWii = temp;
         balanceBoard = (wii_board_t*)bbWii[0];
+        done = true;
         return true;
     } else {
         geode::log::debug("not a balance board!");
@@ -141,6 +143,7 @@ void BalanceBoard::balanceBoardCheckLoop(){
         // }
     }
     endLoop:
+    done = true;
     // this happens when connect is lost
     geode::Loader::get()->queueInMainThread([] {
         PressBindEvent(BBKeybind::create(true), false).post();
