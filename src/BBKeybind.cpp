@@ -1,3 +1,5 @@
+// todo: migrate these to WiiKeybinds mod that is also todo. Then improve latency there.
+
 #include "BBKeybind.hpp"
 
 BBKeybind* BBKeybind::create(bool onB) {

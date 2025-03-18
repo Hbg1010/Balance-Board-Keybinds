@@ -11,20 +11,24 @@ protected:
 
 public:
     BalanceBoardChecker() {
+        
+        BalanceBoard::setAtomicTrue();
         // log::debug("x");
         this->retain();
     }
 
     void checkBalanceBoard() {
-        // log::debug("check 1!!!!!");
+        log::debug("check 1!!!!!");
         bool currentConnected = BalanceBoard::connected();
 
         if (!currentConnected && !m_state) {
-            if (BalanceBoard::done) {
+            if (BalanceBoard::connectCheckDone()) {
                 //https://stackoverflow.com/questions/9094422/how-to-check-if-a-stdthread-is-still-running
                 //https://stackoverflow.com/questions/9094422/how-to-check-if-a-stdthread-is-still-running//
+                log::debug("ALDI");
                 m_BoardLoop = std::thread(&BalanceBoard::checkAndTryConnect);
-                BalanceBoard::done = false;
+                m_BoardLoop.detach();
+                BalanceBoard::setAtomicFalse();
             }
         }
 

@@ -2,7 +2,7 @@
 #include "../include/wiiuse/wiiuse.h"
 #include "BBKeybind.hpp"
 #include "utils/weightUtils.hpp"
-// #include <atomic>
+#include <atomic>
 
 using namespace keybinds;
 
@@ -19,6 +19,23 @@ protected:
 
 public:
     static bool done;
+    static std::atomic<bool>& getInstance() {
+        static std::atomic<bool> flag(false);  // Static initialization of the atomic boolean
+        return flag;
+    }
+
+    static void setAtomicTrue() {
+        getInstance().store(true, std::memory_order_relaxed);
+    }
+
+    static void setAtomicFalse() {
+        getInstance().store(false, std::memory_order_relaxed);
+    }
+
+    static bool connectCheckDone() {
+        return getInstance().load(std::memory_order_relaxed);
+    }
+    
     static BalanceBoard* create(wiimote* input);
     static float getWeight();
     static void setMin(float x);

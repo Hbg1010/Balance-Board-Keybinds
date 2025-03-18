@@ -57,22 +57,40 @@ bool BalanceBoard::connected() {
 }
 
 bool BalanceBoard::checkAndTryConnect() {
-    if (connected()) return true;
+    geode::log::debug("starting");
+    if (connected()) {
+        BalanceBoard::done = true;
+        setAtomicTrue();
+        return true;
+    }
 
     wiimote** temp = wiiuse_init(1);
     int c;
     // TODO: ASSUMES ONLY 1 CONNECTED
-    if (!wiiuse_find(temp, 1, 1)) return false;
+    if (!wiiuse_find(temp, 1, 1)) {
+        BalanceBoard::done = false;
+        setAtomicTrue();
+        return false;
+    }
     
     c = wiiuse_connect(temp, 1);
-    if (c && temp[0]->exp.type == EXP_WII_BOARD){
+
+    if (!c) {
+        setAtomicTrue();
+        return true;
+    }
+
+    wiiuse_poll(temp, 1);
+
+    if (temp[0]->exp.type == EXP_WII_BOARD){
         geode::log::debug("x");
         bbWii = temp;
         balanceBoard = (wii_board_t*)bbWii[0];
-        done = true;
+        setAtomicTrue();
         return true;
     } else {
         geode::log::debug("not a balance board!");
+        setAtomicTrue();
         return false;
     }
 }
