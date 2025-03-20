@@ -18,9 +18,8 @@ public:
     }
 
     void checkBalanceBoard() {
-        log::debug("check 1!!!!!");
         bool currentConnected = BalanceBoard::connected();
-
+        log::debug("{}", currentConnected);
         if (!currentConnected && !m_state) {
             if (BalanceBoard::connectCheckDone()) {
                 //https://stackoverflow.com/questions/9094422/how-to-check-if-a-stdthread-is-still-running
@@ -43,7 +42,7 @@ public:
                 BalanceBoard::done = false;
                 Notification::create(
                     "Balance Board Attached",
-                    CCSprite::createWithSpriteFrameName("controllerBtn_A_001.png") // TODO: custom sprite
+                    CCSprite::create("BalanceBoardIMG.png"_spr) // TODO: custom sprite
                 )->show();
             } else {
                 if (!BalanceBoard::done) {

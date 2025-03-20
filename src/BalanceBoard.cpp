@@ -2,13 +2,13 @@
 
 wiimote** BalanceBoard::bbWii = nullptr;
 wii_board_t* BalanceBoard::balanceBoard = nullptr; // Or initialize properly
-float BalanceBoard::min = 20;
+float BalanceBoard::min = 30;
 bool BalanceBoard::wasOnScale = false;
 bool BalanceBoard::FORCEDISCONNECT = false;
 bool BalanceBoard::done = true;
 
 BalanceBoard::BalanceBoard(wii_board_t* input) {
-    BalanceBoard::min = 20;
+    BalanceBoard::min = 0.000001;
     BalanceBoard::balanceBoard = input;
 }
 
@@ -31,7 +31,9 @@ BalanceBoard* BalanceBoard::create(wiimote* input) {
 
 float BalanceBoard::getWeight() {
     if (connected()) {
-        float total = balanceBoard->tl + balanceBoard->tr + balanceBoard->bl + balanceBoard->br;
+        wii_board_t* x = (wii_board_t*) &bbWii[0]->exp.wb;
+        float total = x->tl + x->tr + x->bl + x->tr;
+        geode::log::debug("{}", total);
         return total;
     } else {
         return -1.f;
@@ -45,7 +47,7 @@ void BalanceBoard::setMin(float x) {
 
 bool BalanceBoard::onScale() {
     if (connected()) {
-        return balanceBoard->tl + balanceBoard->tr + balanceBoard->bl + balanceBoard->br > BalanceBoard::min;
+        return getWeight() > BalanceBoard::min;
     } else {
         // throw event
         return false;
@@ -80,12 +82,13 @@ bool BalanceBoard::checkAndTryConnect() {
         return true;
     }
 
-    wiiuse_poll(temp, 1);
+    
 
     if (temp[0]->exp.type == EXP_WII_BOARD){
         geode::log::debug("x");
         bbWii = temp;
-        balanceBoard = (wii_board_t*)bbWii[0];
+        wiiuse_poll(bbWii, 1);
+        // balanceBoard = (wii_board_t*)&bbWii[0];
         setAtomicTrue();
         return true;
     } else {
@@ -109,18 +112,15 @@ void BalanceBoard::disconnect() {
 
 // This loop will run on a seperate thread. there it will constantly check balance board state
 void BalanceBoard::balanceBoardCheckLoop(){
-    geode::Loader::get()->queueInMainThread([] {
-        geode::log::debug("lost connection!");
-    });
-
     while(connected() && !FORCEDISCONNECT){
         if (wiiuse_poll(bbWii, 1)) {
+            // geode::log::debug("hello worldy");
             switch (bbWii[0]->event) {
                 case WIIUSE_EVENT:
-                    if (wasOnScale != onScale()) {
-                        wasOnScale = !wasOnScale;
+                    // if (wasOnScale != onScale()) {
+                    //     wasOnScale = onScale();
 
-                        if (wasOnScale) {
+                        if (onScale()) {
                             geode::Loader::get()->queueInMainThread([=] {
                                 PressBindEvent(BBKeybind::create(onScale()), false).post();
                             }); 
@@ -129,7 +129,7 @@ void BalanceBoard::balanceBoardCheckLoop(){
                                 PressBindEvent(BBKeybind::create(onScale()), true).post();
                             }); 
                         }
-                    }
+                    // }
                     break;
                 case WIIUSE_STATUS:
                     /* a status event occurred */
