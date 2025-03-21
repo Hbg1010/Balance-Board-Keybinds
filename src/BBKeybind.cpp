@@ -23,14 +23,14 @@ DeviceID BBKeybind::getDeviceID() const {
 
 matjson::Value BBKeybind::save() const {
     return matjson::makeObject({
-        { "onBoard", static_cast<bool>(onScale)}
+        { "onBoard", onScale}
     });
 }
 
 BBKeybind* BBKeybind::parse(matjson::Value const& json) {
     return BBKeybind::create(
         // static_cast<float>(json["weight"].asDouble().unwrapOr(0)),
-        static_cast<bool>(json["onBoard"].asBool().unwrapOr(false))
+        json["onBoard"].asBool().unwrapOr(false)
     );
 }
 
@@ -48,5 +48,9 @@ float BBKeybind::getWeight() const {
 }
 
 std::string BBKeybind::toString() const {
-    return onScale ? "On Board" : "Off Balance Board";
+    if (onScale) {
+        return "On Board";
+    } else {
+        return "Off Board";
+    }
 }

@@ -36,7 +36,7 @@ public:
 
             if (m_state) {
                 BindManager::get()->attachDevice("balance_board"_spr, &BBKeybind::parse);
-                BindManager::get()->addBindTo("robtop.geometry-dash/jump-p1", BBKeybind::create(false));
+                BindManager::get()->addBindTo("robtop.geometry-dash/jump-p1", BBKeybind::create(true));
                 BalanceBoard::FORCEDISCONNECT = false;
                 m_BoardLoop = std::thread(&BalanceBoard::balanceBoardCheckLoop);
                 BalanceBoard::done = false;

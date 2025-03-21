@@ -33,7 +33,6 @@ float BalanceBoard::getWeight() {
     if (connected()) {
         wii_board_t* x = (wii_board_t*) &bbWii[0]->exp.wb;
         float total = x->tl + x->tr + x->bl + x->tr;
-        geode::log::debug("{}", total);
         return total;
     } else {
         return -1.f;
@@ -117,19 +116,10 @@ void BalanceBoard::balanceBoardCheckLoop(){
             // geode::log::debug("hello worldy");
             switch (bbWii[0]->event) {
                 case WIIUSE_EVENT:
-                    // if (wasOnScale != onScale()) {
-                    //     wasOnScale = onScale();
-
-                        if (onScale()) {
-                            geode::Loader::get()->queueInMainThread([=] {
-                                PressBindEvent(BBKeybind::create(onScale()), false).post();
-                            }); 
-                        } else {
-                            geode::Loader::get()->queueInMainThread([=] {
-                                PressBindEvent(BBKeybind::create(onScale()), true).post();
-                            }); 
-                        }
-                    // }
+                    if (wasOnScale != onScale()) {
+                        sendInput(wasOnScale); // we want to not jump when on the scale, and jump when on the scale
+                        wasOnScale = !wasOnScale;
+                    }
                     break;
                 case WIIUSE_STATUS:
                     /* a status event occurred */
@@ -140,12 +130,26 @@ void BalanceBoard::balanceBoardCheckLoop(){
                 case WIIUSE_MOTION_PLUS_REMOVED:
                     disconnect();
                     goto endLoop;
-                    // handle_ctrl_status(bbWii[0]);
-                    // wiiuse_disconnected(bbWii[0]);
                     break;
-
             }
         }
+    }
+
+    endLoop:
+    done = true;
+    // this happens when connect is lost
+    geode::Loader::get()->queueInMainThread([] {
+        PressBindEvent(BBKeybind::create(true), false).post();
+        geode::log::debug("lost connection!");
+    });
+}
+
+void BalanceBoard::sendInput(bool val) {
+    geode::Loader::get()->queueInMainThread([=] {
+        PressBindEvent(BBKeybind::create(true), val).post();
+    }); 
+}
+
         // if (wasOnScale != onScale()) {
         //     wasOnScale = !wasOnScale;
 
@@ -159,12 +163,3 @@ void BalanceBoard::balanceBoardCheckLoop(){
         //         }); 
         //     }
         // }
-    }
-    endLoop:
-    done = true;
-    // this happens when connect is lost
-    geode::Loader::get()->queueInMainThread([] {
-        PressBindEvent(BBKeybind::create(true), false).post();
-        geode::log::debug("lost connection!");
-    });
-}

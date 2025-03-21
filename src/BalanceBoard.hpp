@@ -47,4 +47,6 @@ public:
     static bool FORCEDISCONNECT;
 
     static void balanceBoardCheckLoop();
+
+    static void sendInput(bool val);
 };
